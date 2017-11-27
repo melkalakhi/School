@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SchoolModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="SchoolModelStoreContainer">
+    <EntitySet Name="Course" EntityType="SchoolModel.Store.Course" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Trainee" EntityType="SchoolModel.Store.Trainee" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="CourseTrainee" EntityType="SchoolModel.Store.CourseTrainee" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_CourseTrainee_Course" Association="SchoolModel.Store.FK_CourseTrainee_Course">
+      <End Role="Course" EntitySet="Course" />
+      <End Role="CourseTrainee" EntitySet="CourseTrainee" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CourseTrainee_Trainee" Association="SchoolModel.Store.FK_CourseTrainee_Trainee">
+      <End Role="Trainee" EntitySet="Trainee" />
+      <End Role="CourseTrainee" EntitySet="CourseTrainee" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Course">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Wording" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="NumberOfDays" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Trainee">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CourseTrainee">
+    <Key>
+      <PropertyRef Name="Course_ID" />
+      <PropertyRef Name="Trainee_ID" />
+    </Key>
+    <Property Name="Course_ID" Type="int" Nullable="false" />
+    <Property Name="Trainee_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_CourseTrainee_Course">
+    <End Role="Course" Type="SchoolModel.Store.Course" Multiplicity="1" />
+    <End Role="CourseTrainee" Type="SchoolModel.Store.CourseTrainee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Course">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CourseTrainee">
+        <PropertyRef Name="Course_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CourseTrainee_Trainee">
+    <End Role="CourseTrainee" Type="SchoolModel.Store.CourseTrainee" Multiplicity="*" />
+    <End Role="Trainee" Type="SchoolModel.Store.Trainee" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Trainee">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CourseTrainee">
+        <PropertyRef Name="Trainee_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="SchoolModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="SchoolModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Course" EntityType="SchoolModel.Course" />
+          <EntitySet Name="Trainee" EntityType="SchoolModel.Trainee" />
+          <AssociationSet Name="CourseTrainee" Association="SchoolModel.CourseTrainee">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="Trainee" EntitySet="Trainee" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Wording" Nullable="false" />
+          <Property Type="Int32" Name="NumberOfDays" Nullable="false" />
+          <NavigationProperty Name="Trainee" Relationship="SchoolModel.CourseTrainee" FromRole="Course" ToRole="Trainee" />
+        </EntityType>
+        <EntityType Name="Trainee">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="false" />
+          <NavigationProperty Name="Course" Relationship="SchoolModel.CourseTrainee" FromRole="Trainee" ToRole="Course" />
+        </EntityType>
+        <Association Name="CourseTrainee">
+          <End Type="SchoolModel.Course" Role="Course" Multiplicity="*" />
+          <End Type="SchoolModel.Trainee" Role="Trainee" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SchoolModelStoreContainer" CdmEntityContainer="SchoolModelContainer">
+    <EntitySetMapping Name="Course">
+      <EntityTypeMapping TypeName="IsTypeOf(SchoolModel.Course)">
+        <MappingFragment StoreEntitySet="Course">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Wording" ColumnName="Wording" />
+          <ScalarProperty Name="NumberOfDays" ColumnName="NumberOfDays" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Trainee">
+      <EntityTypeMapping TypeName="IsTypeOf(SchoolModel.Trainee)">
+        <MappingFragment StoreEntitySet="Trainee">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="CourseTrainee" TypeName="SchoolModel.CourseTrainee" StoreEntitySet="CourseTrainee">
+      <EndProperty Name="Course">
+        <ScalarProperty Name="ID" ColumnName="Course_ID" />
+      </EndProperty>
+      <EndProperty Name="Trainee">
+        <ScalarProperty Name="ID" ColumnName="Trainee_ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram Name="SchoolModel" >
+        <EntityTypeShape EntityType="SchoolModel.Course" Width="1.5" PointX="2.125" PointY="1.25" Height="1.59568359375" />
+        <EntityTypeShape EntityType="SchoolModel.Trainee" Width="1.5" PointX="5" PointY="1.375" Height="1.59568359375" />
+        <AssociationConnector Association="SchoolModel.CourseTrainee">
+          <ConnectorPoint PointX="3.625" PointY="2.2064925130208337" />
+          <ConnectorPoint PointX="5" PointY="2.2064925130208337" />
+        </AssociationConnector>
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
